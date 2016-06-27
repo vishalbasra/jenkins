@@ -1,0 +1,61 @@
+
+#!/bin/bash
+
+
+
+#	please note that df -h | tail -n +2 | awk {'print $1'} can also do the same thing very easily. 
+
+
+
+
+#creating a file called current-df-output.txt
+df -h | tail -n +2 | awk {'print $1'} >> current-df-output.txt
+
+
+################ creating a file and using it for counting values
+
+#echo seeing total lines/drives		;	setting a counter	;	2 loops to compare and put the O/P of current file into an array
+
+LINES=`wc -l current-df-output.txt | awk '{print $1}'`
+##echo the number of lines are $LINES
+
+#echo setting up a counter for seeing the total number of drives in the current file
+COUNTER=0
+while [ $COUNTER -lt $LINES ]
+do
+#echo "We're in the while loop"
+        for j in `cat current-df-output.txt`
+        do
+                 #echo the value of thevar is $j
+                 NAMES[$COUNTER]=$j
+                #echo The name is $NAMES
+                ((COUNTER=COUNTER+1))
+        done
+done
+
+
+#echo	Finally asking for disk to select 
+
+
+	echo "Please select a Disk by choosing a number from the options below."
+	echo "Please note that if you erronously choose a number not present in the list, the program will exit for security purposes as a failsafe so that a new, uninitialiazed disk does not get corrupted."
+
+
+select DIR in "${NAMES[@]}"
+do
+	 [ -z $DIR ] || echo Selected $DIR && break
+ 
+done
+i
+
+############### done
+
+
+################ using another approach now 
+
+#deleting the current file
+rm current-df-output.txt && #echo The current file was cleared
+
+
+
+exit 0
