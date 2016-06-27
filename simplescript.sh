@@ -10,7 +10,7 @@ w
 
 echo $HOSTNAME
 
-
+echo "This is now a changed build!" 
 
 exit 0
 
